@@ -4,7 +4,7 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:orientation="vertical"
-              tools:context="com.abemart.wroupchat.MainActivity">
+              tools:context="com.abemart.wroup.MainActivity">
 
     <ListView
         android:id="@+id/list_view_group_chat"

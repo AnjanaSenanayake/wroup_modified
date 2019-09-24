@@ -1,9 +1,9 @@
-package com.abemart.wroupchat;
+package com.abemart.wroup;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -39,7 +39,7 @@ public class GroupChatActivity extends AppCompatActivity implements DataReceived
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_group_chat);
+        setContentView(R.layout.activity_pipeline);
 
         chatAdapter = new ChatAdapter(getApplicationContext(), new ArrayList<MessageWrapper>(), WiFiP2PInstance.getInstance(getApplicationContext()).getThisDevice());
 
@@ -59,19 +59,21 @@ public class GroupChatActivity extends AppCompatActivity implements DataReceived
             wroupClient.setClientConnectedListener(this);
         }
 
-        listViewChat = (ListView) findViewById(R.id.list_view_group_chat);
-        Button btnSend = (Button) findViewById(R.id.button_send_message);
-        final EditText editTextMessage = (EditText) findViewById(R.id.edit_text_chat_message);
+        listViewChat = (ListView) findViewById(R.id.list_view_objects);
+        Button btnSend = (Button) findViewById(R.id.btn_send);
+        final EditText editObjectID = (EditText) findViewById(R.id.object_id_input);
+        final EditText editObjectName = (EditText) findViewById(R.id.object_name_input);
 
         listViewChat.setAdapter(chatAdapter);
 
         btnSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String messageStr = editTextMessage.getText().toString();
-                if (messageStr != null && !messageStr.isEmpty()) {
+                String id = editObjectID.getText().toString();
+                final Pipeline newPipelineObject = new Pipeline(Integer.parseInt(id), editObjectName.getText().toString());
+                if (newPipelineObject != null) {
                     MessageWrapper normalMessage = new MessageWrapper();
-                    normalMessage.setMessage(editTextMessage.getText().toString());
+                    normalMessage.setPipelineObject(newPipelineObject);
                     normalMessage.setMessageType(MessageWrapper.MessageType.NORMAL);
 
                     if (isGroupOwner) {
@@ -81,7 +83,8 @@ public class GroupChatActivity extends AppCompatActivity implements DataReceived
                     }
 
                     chatAdapter.add(normalMessage);
-                    editTextMessage.setText("");
+                    editObjectID.setText("");
+                    editObjectName.setText("");
                 }
             }
         });
